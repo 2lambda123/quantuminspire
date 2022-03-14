@@ -173,8 +173,7 @@ class QuantumInspireBackend(Backend):  # type: ignore
             experiments = qobj.experiments
             job = QIJob(self, str(project['id']), self.__api)
             for experiment in experiments:
-                measurements = Measurements()
-                measurements.collect_measurements(experiment)
+                measurements = Measurements.from_experiment(experiment)
                 if Backend.configuration(self).conditional:
                     self.__validate_nr_of_clbits_conditional_gates(experiment)
                 full_state_projection = Backend.configuration(self).simulator and \
@@ -283,8 +282,7 @@ class QuantumInspireBackend(Backend):  # type: ignore
                     'Result from backend contains no histogram data!\n{}'.format(result.get('raw_text')))
 
             user_data = json.loads(str(job.get('user_data')))
-            measurements = Measurements()
-            measurements.from_dict(user_data.pop('measurements'))
+            measurements = Measurements.from_dict(user_data.pop('measurements'))
             histogram_obj, memory_data = self.__convert_result_data(result, measurements)
             full_state_histogram_obj = self.__convert_histogram(result, measurements)
             calibration = self.__api.get_calibration_from_result(result['id'])
