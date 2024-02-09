@@ -25,7 +25,7 @@ def get_version_number(module):
             Str: the version number.
     """
     with open('src/{}/version.py'.format(module), 'r') as file_stream:
-        line = file_stream.readline().split()
+        line = file_stream.readline(5_000_000).split()
         version_number = line[2].replace('\'', '')
     return version_number
 
